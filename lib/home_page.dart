@@ -1,5 +1,9 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, avoid_unnecessary_containers
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, avoid_unnecessary_containers, implementation_imports
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
+
+import 'contador.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,20 +16,24 @@ class HomePage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.70,
-            margin: EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Center(
-              child: Text(
-                "0",
-                style: TextStyle(fontSize: 72),
+          Consumer<Contador>(builder: (context, counter, child) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.70,
+              margin: EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: counter.color,
+                borderRadius: BorderRadius.circular(15.0),
               ),
-            ),
-          ),
+              child: Center(
+                child: Consumer<Contador>(builder: (context, counter, child) {
+                  return Text(
+                    '${counter.count}',
+                    style: TextStyle(fontSize: 72),
+                  );
+                }),
+              ),
+            );
+          }),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -35,7 +43,9 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[200]),
                 ),
                 color: Colors.black87,
-                onPressed: () {},
+                onPressed: () {
+                  context.read<Contador>().goBlack();
+                },
               ),
               MaterialButton(
                 child: Text(
@@ -43,7 +53,9 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[200]),
                 ),
                 color: Colors.red,
-                onPressed: () {},
+                onPressed: () {
+                  context.read<Contador>().goRed();
+                },
               ),
               MaterialButton(
                 child: Text(
@@ -51,7 +63,9 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[200]),
                 ),
                 color: Colors.blue,
-                onPressed: () {},
+                onPressed: () {
+                  context.read<Contador>().goBlue();
+                },
               ),
               MaterialButton(
                 child: Text(
@@ -59,7 +73,9 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[200]),
                 ),
                 color: Colors.green,
-                onPressed: () {},
+                onPressed: () {
+                  context.read<Contador>().goGreen();
+                },
               ),
             ],
           ),
@@ -74,7 +90,9 @@ class HomePage extends StatelessWidget {
                   tooltip: "Sumar 1 cuenta",
                   icon: Icon(Icons.add),
                   color: Colors.grey[200],
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<Contador>().increment();
+                  },
                 ),
               ),
               CircleAvatar(
@@ -84,7 +102,9 @@ class HomePage extends StatelessWidget {
                   tooltip: "Restar 1 cuenta",
                   icon: Icon(Icons.remove),
                   color: Colors.grey[200],
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<Contador>().decrement();
+                  },
                 ),
               ),
               CircleAvatar(
@@ -94,7 +114,9 @@ class HomePage extends StatelessWidget {
                   tooltip: "Reiniciar cuenta",
                   icon: Icon(Icons.restart_alt),
                   color: Colors.grey[200],
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<Contador>().reset();
+                  },
                 ),
               ),
             ],
